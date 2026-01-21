@@ -326,7 +326,12 @@
                 
                 html += `<h3 class="flex-none text-xl md:text-2xl font-bold text-orange-700 mb-6 uppercase border-b border-orange-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
                 
-                html += `<div class="flex-grow flex flex-col items-center justify-center gap-6 w-full text-center">`;
+                // SỬA ĐỔI Ở ĐÂY: Thay vì text-center (căn giữa từng dòng), dùng flex-col items-center để căn giữa khối,
+                // và bên trong dùng text-left w-fit để các dòng thơ thẳng hàng nhau.
+                html += `<div class="flex-grow flex flex-col items-center justify-center w-full">`;
+                
+                // Wrapper cho bài thơ: w-fit để ôm vừa nội dung, text-left để thẳng hàng
+                html += `<div class="flex flex-col gap-6 text-left w-fit max-w-full">`; 
                 
                 currentCard.poem.forEach((stanza) => {
                     html += `
@@ -336,7 +341,8 @@
                     `;
                 });
                 
-                html += `</div>`; // End Poem Container
+                html += `</div>`; // End Poem Wrapper
+                html += `</div>`; // End Flex Grow Container
                 html += `</div>`; // End Main Container
             }
 
@@ -445,5 +451,4 @@
 
     </script>
 </body>
-
 </html>
