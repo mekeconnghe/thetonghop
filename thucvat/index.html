@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thế Giới Thực Vật - Thơ Hay Cho Bé</title>
+    
+    <meta property="og:title" content="Bộ Thẻ Khám Phá Thế Giới - Giúp bé phát triển tư duy, kích thích trí tưởng tượng" />
+    <meta property="og:description" content="Các loài thực vật theo nơi sinh trưởng" />
+    <meta property="og:image" content="https://i.pinimg.com/736x/04/d8/13/04d81324b2574c0c10df6f06b415985f.jpg" />
+    <meta property="og:type" content="https://mekeconnghe.github.io/thetonghop/thucvat/" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+            <i data-lucide="leaf" class="w-6 h-6 md:w-8 md:h-8 text-green-500"></i>
+            Khám Phá Thế Giới Quanh Ta
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-slate-600 uppercase tracking-widest border-b-2 border-slate-200 inline-block pb-1">
+            Thực vật theo nơi sinh trưởng
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/vlhiiv860" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-slate-300 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="map-pin" class="w-3 h-3 text-orange-500"></i>
+                            <span id="counter-text">1/20</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-500 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white px-4 py-3 rounded-xl shadow-md shadow-orange-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            {
+                id: 1, name: "Cây Lúa", image: "cay-lua.jpg",
+                poem: [
+                    "Cày đồng đang buổi ban trưa<br>Mồ hôi thánh thót như mưa ruộng cày<br>Ai ơi bưng bát cơm đầy<br>Dẻo thơm một hạt đắng cay muôn phần." 
+                ]
+            },
+            {
+                id: 2, name: "Cây Chuối Nhà Em", image: "cay-chuoi.jpg",
+                poem: [
+                    "Sau vườn nhà em<br>Có cây chuối già<br>Chỉ mới ra hoa<br>Nhưng mầm đã mọc",
+                    "Chuối ơi, chuối hỡi!<br>Sao quá lạ kì?<br>Chuối khẽ thầm thì:<br>“Nay tôi đã già”",
+                    "Con tôi đã mọc,<br>Đó là mầm xanh<br>Duy trì nòi giống"
+                ]
+            },
+            {
+                id: 3, name: "Cây Xoài Nhà Em", image: "cay-xoai.jpg",
+                poem: [
+                    "Nhà em có một cây xoài<br>Lá xanh mát rượi, hoa cài đầy cây<br>Trái non bé xíu trên tay<br>Lớn lên chín mọng vàng ngay giữa vườn.",
+                    "Mỗi chiều em đứng em thương,<br>Ngắm cây xoài trổ trái vương đầy cành<br>Bố chăm cây lớn thật nhanh,<br>Xoài ngọt em hái, biếu dành tặng ông."
+                ]
+            },
+            {
+                id: 4, name: "Hoa Phượng", image: "hoa-phuong.jpg",
+                poem: [
+                    "Hôm qua còn lấm tấm<br>Chen lẫn màu lá xanh<br>Sáng nay bừng lửa thẫm<br>Rừng rực cháy trên cành.",
+                    "Bà ơi! Sao mà nhanh<br>Phượng nở nghìn mắt lửa<br>Cả dãy phố nhà mình<br>Một trời hoa phượng đỏ.",
+                    "Hay đêm qua không ngủ<br>Chị gió quạt cho cây?<br>Hay mặt trời ủ lửa<br>Cho hoa bừng hôm nay?"
+                ]
+            },
+            {
+                id: 5, name: "Hoa Hồng", image: "hoa-hong.jpg",
+                poem: [
+                    "Hoa hồng màu đỏ<br>Cánh tròn tròn xinh<br>Gió thổi rung rinh<br>Hương thơm ngan ngát.",
+                    "Sương đêm long lanh<br>Đọng trên cánh thắm<br>Đón chào ngày nắng<br>Ngọt ngào hương say."
+                ]
+            },
+            {
+                id: 6, name: "Cây Tre", image: "cay-tre.jpg",
+                poem: [
+                    "Mỗi sớm mai thức dậy<br>Lũy tre xanh rì rào<br>Ngọn tre cong gọng vó<br>Kéo mặt trời lên cao.",
+                    "Những trưa đồng đầy nắng<br>Trâu nằm nhai bóng râm<br>Tre bần thần nhớ gió<br>Chợt về đầy tiếng chim.",
+                    "Mặt trời xuống núi ngủ<br>Tre nâng vầng trăng lên<br>Sao, sao treo đầy cành<br>Suốt đêm dài thắp sáng."
+                ]
+            },
+            {
+                id: 7, name: "Cây Cỏ", image: "cay-co.jpg",
+                poem: [
+                    "Cỏ dại ven đường<br>Buổi sáng thích sương<br>Dù không được thương<br>Nhưng cây vấn tốt.",
+                    "Sau này mai mốt<br>Khi cây lớn lên<br>Nhớ mãi không quên<br>Những ngày vất vả."
+                ]
+            },
+            {
+                id: 8, name: "Cây Khế", image: "cay-khe.jpg",
+                poem: [
+                    "Mẹ thương cây khế sau nhà<br>Những đêm giá lạnh sương sa đầy vườn.<br>Góc vườn khế vẫn tươi non<br>Tán xanh như khoảng trời tròn dưới trưa.",
+                    "Tảo tần đứng nắng chịu mưa<br>Đến mùa trái chín đung đưa từng chùm.<br>... Mẹ ngồi bện chổi tàu cau<br>Kể về câu chuyện sang giàu khế chua.",
+                    "Kể rằng: \"Ngày xửa ngày xưa<br>Ăn một trái khế chim đưa cục vàng...\""
+                ]
+            },
+            {
+                id: 9, name: "Hoa Sen", image: "hoa-sen.jpg",
+                poem: [
+                    "Trong đầm gì đẹp bằng sen<br>Lá xanh bông trắng lại chen nhị vàng.",
+                    "Nhị vàng, bông trắng, lá xanh<br>Gần bùn mà chẳng hôi tanh mùi bùn."
+                ]
+            },
+            {
+                id: 10, name: "Cây Hoa Súng", image: "hoa-sung.jpg",
+                poem: [
+                    "Em như bông súng ao nhà<br>Thủy chung son sắt nở hoa bốn mùa<br>Mặc cho giông gió nắng mưa<br>Tím màu chung thủy gió lùa chiều đông.",
+                    "Không cao sang tím trắng hồng<br>Dẻo dai sống ở trên đồng dưới ao<br>Giữa bùn mà vẫn thanh cao<br>Mang cho đời vị ngọt ngào canh chua."
+                ]
+            },
+            {
+                id: 11, name: "Cây Lục Bình", image: "luc-binh.jpg",
+                poem: [
+                    "Có một loài hoa<br>Vừa trôi vừa nở<br>Em ơi có nhớ<br>Loài hoa tên gì?",
+                    "Sắc hoa tím biếc<br>Như màu mực nghiêng<br>Loài hoa sương khói<br>Lục bình, em ơi..."
+                ]
+            },
+            {
+                id: 12, name: "Cây Bèo Tấm", image: "beo-tam.jpg",
+                poem: [
+                    "Bèo tấm bé tẹo teo<br>Mặc áo màu xanh biếc<br>Chị gió đi mải miết<br>Rủ bèo tấm đi theo.",
+                    "Bèo tấm liền lắc khẽ:<br>\"Em đi thì trời nắng<br>Ao không có mũ che<br>Nước sẽ không được mát\""
+                ]
+            },
+            {
+                id: 13, name: "Cây Rau Muống", image: "rau-muong.jpg",
+                poem: [
+                    "Kìa ​cây rau muống<br>Mọc ở bờ ao<br>Ngọn vươn lên cao<br>Xanh non tươi quá.",
+                    "Mẹ hái những lá<br>Ngon ngọt tươi xanh<br>Mang về nấu canh<br>Bé ăn cao lớn"
+                ]
+            },
+            {
+                id: 14, name: "Rong Biển", image: "rong-bien.jpg",
+                poem: [
+                    "Dưới làn nước biếc<br>Là những rừng rong<br>Đung đưa theo sóng<br>Như ngàn cánh tay.",
+                    "San hô rực rỡ<br>Cá lội tung tăng<br>Biển ơi đẹp quá<br>Mênh mông vô cùng..."
+                ]
+            },
+            {
+                id: 15, name: "Cây Xương Rồng", image: "xuong-rong.jpg",
+                poem: [
+                    "Ngày xưa người mẹ héo hon<br>Mỏi mòn chờ đợi đứa con không về<br>Hóa thành cây ở bờ đê<br>Thân gầy gai góc, ủ ê nỗi buồn.",
+                    "Cát bay, gió thổi, mưa tuôn<br>Mẹ già vẫn đứng mỏi mòn chờ con<br>Nở hoa đỏ thắm lòng son<br>Xương rồng là mẹ, sắt son đợi chờ."
+                ]
+            },
+            {
+                id: 16, name: "Cây Nha Đam", image: "nha-dam.jpg",
+                poem: [
+                    "Chẳng thấy thân đâu<br>Chỉ toàn là lá<br>Cây háu ăn quá<br>Mập ú mập ù.",
+                    "Vỏ láng trơn tru<br>Có nhiều gai nhỏ<br>Vỏ ngoài gọt bỏ<br>Lấy lớp cơm trong.",
+                    "Mát miệng thơm lòng<br>Chén chè dân dã<br>Những trưa nắng hạ<br>Nước mát nha đam<br>Ai nhìn cũng ham<br>Xua tan cơn khát."
+                ]
+            },
+            {
+                id: 17, name: "Hoa Lan", image: "hoa-lan.jpg",
+                poem: [
+                    "Hoa lan cánh trắng<br>Điểm lấm tấm hồng<br>Hương bay theo gió<br>Tỏa ngát mênh mông.",
+                    "Hoa lan xinh quá<br>Chúm chím nụ cười<br>Như bàn tay bé<br>Vẫy chào mọi người."
+                ]
+            },
+            {
+                id: 18, name: "Cây Dương Xỉ", image: "duong-xi.jpg",
+                poem: [
+                    "Mọc ở chân tường<br>Hay bên bờ giếng<br>Chỗ nào ẩm ướt<br>Là có chúng tôi.",
+                    "Chẳng có hoa đâu<br>Chỉ toàn là lá<br>Lá già màu thẫm<br>Lá non xanh tơ.",
+                    "Dáng cong mềm mại<br>Như cần câu buông<br>Làm duyên làm dáng<br>Soi bóng mặt hồ."
+                ]
+            },
+            {
+                id: 19, name: "Cây Đước", image: "cay-duoc.jpg",
+                poem: [
+                    "Đước đã mọc thành rừng gỗ cứng<br>Gió càng lay càng vững thành đồng<br>Đước giữ đất, giữ trời, giữ nước<br>Đước giữ gìn xương máu cha ông.",
+                    "Tổ quốc tôi như một con tàu<br>Mũi thuyền ta đó - mũi Cà Mau<br>Những dòng sông rộng hơn ngàn thước<br>Trùng điệp một màu xanh lá đước"
+                ]
+            },
+            {
+                id: 20, name: "Sen Đá", image: "sen-da.jpg",
+                poem: [
+                    "Chiếc lá già rụng xuống<br>Tưởng là đã bỏ đi<br>Nhưng phép màu kỳ diệu<br>Bé đã thấy bao giờ?",
+                    "Từ mép lá khô ấy<br>Nảy mầm một chồi non<br>Rễ bám sâu vào đất<br>Cây mới lại lớn lên.",
+                    "Sen đá là như thế<br>Sức sống thật diệu kỳ<br>Chẳng bao giờ lùi bước<br>Trước khó khăn, hiểm nguy."
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thơ Hay';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-orange-100 text-orange-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Hình Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem bài thơ
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU - THƠ
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4 justify-center">`;
+                
+                html += `<h3 class="flex-none text-xl md:text-2xl font-bold text-orange-700 mb-6 uppercase border-b border-orange-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col items-center justify-center w-full">`;
+                html += `<div class="flex flex-col gap-6 text-left w-fit max-w-full">`;
+
+                currentCard.poem.forEach((stanza) => {
+                    html += `
+                        <p class="text-slate-700 text-base md:text-lg font-medium leading-relaxed">
+                            ${stanza}
+                        </p>
+                    `;
+                });
+                
+                html += `</div>`; // End Inner Poem Wrapper
+                html += `</div>`; // End Outer Container
+                html += `</div>`; // End Main Card Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-green-100 to-yellow-200 p-6 rounded-full shadow-lg shadow-green-200">
+                        <i data-lucide="award" class="w-20 h-20 text-green-600 fill-green-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} loại thực vật theo nơi sinh trưởng!
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-col gap-4 w-full items-center mt-2">
+                         <a href="https://catalog.zalo.me/?cid=Cj7DJZsJd0quribUCkIP5roWjaPPcESPLAtCHYAUbnDTeA5SCfhpS0" 
+                           target="_blank"
+                           class="w-full max-w-xs flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100">
+                            <i data-lucide="gift" class="w-5 h-5"></i>
+                            Sản phẩm cho sức khoẻ Mẹ & Bé 
+                        </a>
+
+                        <a href="https://catalog.zalo.me/?cid=CjBEIJkIbGe-ry1PDEMG45gXlq5VcUuUKgp5GIIVdXHReQXRD9lwTm" 
+                           target="_blank"
+                           class="inline-flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all hover:scale-105 transform border border-blue-400">
+                            <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                            Sản phẩm phát triển trí tuệ & Cảm xúc cho bé
+                        </a>
+                    </div>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-green-600 hover:text-green-800 font-semibold text-sm mt-4 bg-green-50 px-5 py-2 rounded-full transition-colors border border-green-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
