@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thế Giới Động Vật - Thơ Hay Cho Bé</title>
+    
+    <meta property="og:title" content="Bộ Thẻ Khám Phá Thế Giới - Giúp bé phát triển tư duy, kích thích trí tưởng tượng" />
+    <meta property="og:description" content="Các loài động vật ban ngày và ban đêm" />
+    <meta property="og:image" content="https://i.pinimg.com/736x/c3/36/41/c336419331fc7c33d043daac4bb111cb.jpg" />
+    <meta property="og:type" content="https://mekeconnghe.github.io/thetonghop/dongvat" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+            <i data-lucide="paw-print" class="w-6 h-6 md:w-8 md:h-8 text-orange-500"></i>
+            Khám Phá Thế Giới Quanh Ta
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-slate-600 uppercase tracking-widest border-b-2 border-slate-200 inline-block pb-1">
+            Động vật Ban Ngày & Ban Đêm
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/hirmwg741" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-slate-300 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="sun-moon" class="w-3 h-3 text-orange-500"></i>
+                            <span id="counter-text">1/20</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-500 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white px-4 py-3 rounded-xl shadow-md shadow-orange-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            // --- ĐỘNG VẬT BAN NGÀY (1-10) ---
+            {
+                id: 1, name: "Chú gà trống", image: "gatrong.jpg",
+                poem: [
+                    "Chú gà trống kiêu hãnh<br>Đứng trên đống rơm cao<br>Ngẩng cao đầu tự đắc<br>Gáy gọi bình minh vào.",
+                    "Bộ lông đỏ rực rỡ<br>Cái mào tựa hoa tươi<br>Chân bước đi dõng dạc<br>Vang tiếng gáy cho đời."
+                ]
+            },
+            {
+                id: 2, name: "Cún Con", image: "concho.jpg",
+                poem: [
+                    "Cún con tinh nghịch<br>Chạy nhảy khắp nhà<br>Đôi tai vểnh ngược<br>Trông thật kiêu sa.",
+                    "Thấy người lạ đến<br>Cún sủa: Gâu! Gâu!<br>Thấy người quen thuộc<br>Cún tới dụi đầu."
+                ]
+            },
+            {
+                id: 3, name: "Con Bướm Trắng", image: "conbuom.jpg",
+                poem: [
+                    "Con bướm trắng<br>Dạo vườn hồng<br>Gặp con ong<br>Đang bay vội.",
+                    "Bướm liền gọi<br>Rủ đi chơi<br>Ong trả lời:<br>\"Tôi còn học!\""
+                ]
+            },
+            {
+                id: 4, name: "Con ong", image: "conong.jpg",
+                poem: [
+                    "Con ong bé xíu<br>Chăm chỉ suốt ngày<br>Đôi cánh vẫy vẫy<br>Theo hoa mà bay.",
+                    "Hút ngàn vạn giọt<br>Mật ngọt cho đời<br>Ong không biết mệt<br>Ong chẳng đi chơi"
+                ]
+            },
+            {
+                id: 5, name: "Sẻ Và Nắng", image: "chimse.jpg",
+                poem: [
+                    "Nắng vàng rực rỡ<br>Sẻ nhỏ nhảy quanh<br>Đôi mắt đen láy<br>Nhìn trời trong xanh.",
+                    "Cánh vỗ rung rinh<br>Đậu trên cành khế<br>Sẻ ơi yêu thế<br>Tiếng hót trong lành"
+                ]
+            },
+            {
+                id: 6, name: "Con Voi", image: "convoi.jpg",
+                poem: [
+                    "Thân hình to lớn<br>Da xám nhăn nheo<br>Đôi tai như quạt<br>Quạt gió vèo vèo.",
+                    "Cái vòi vắt vẻo<br>Hút nước phun mưa<br>Voi thích ăn mía<br>Bé tặng voi chưa?"
+                ]
+            },
+            {
+                id: 7, name: "Con Bò", image: "conbo.jpg",
+                poem: [
+                    "Con bò hiền hậu<br>Nhai cỏ xanh non<br>Cái đuôi bận rộn<br>Xua đuổi ruồi con.",
+                    "Đôi tai như lá<br>Vẫy vẫy trên đầu<br>Bò đi thong thả<br>Chẳng vội gì đâu"
+                ]
+            },
+            {
+                id: 8, name: "Tiếng Vó Ngựa", image: "conngua.jpg",
+                poem: [
+                    "Cộc cộc, cộc cộc<br>Tiếng vó ngựa vang<br>Trên đường sỏi đá<br>Về tận bản làng.",
+                    "Ngựa chở lúa vàng<br>Ngựa chở ngô khoai<br>Lưng ngựa vững chãi<br>Giúp người một tay."
+                ]
+            },
+            {
+                id: 9, name: "Đàn Vịt", image: "convit.jpg",
+                poem: [
+                    "Lạch bà lạch bạch<br>Đàn vịt đi chơi<br>Thấy ao nước mát<br>Cùng nhảy xuống bơi.",
+                    "Mỏ vàng xúc nước<br>Cánh muốn vờn mây<br>Vịt con khéo quá<br>Chẳng sợ bùn lầy"
+                ]
+            },
+            {
+                id: 10, name: "Chú Khỉ Con", image: "conkhi.jpg",
+                poem: [
+                    "Chú khỉ tinh nghịch<br>Leo trèo rất nhanh<br>Thoăn thoắt trên cành<br>Như là làm xiếc.",
+                    "Đôi mắt màu biếc<br>Cái đuôi dài ghê<br>Ăn chuối say mê<br>Thật là vui vẻ"
+                ]
+            },
+            // --- ĐỘNG VẬT BAN ĐÊM (11-20) ---
+            {
+                id: 11, name: "Chú Cú Mèo", image: "cumeo.jpg",
+                poem: [
+                    "Trăng vàng lơ lửng<br>Cú đậu cành ngang<br>Bộ lông xám vàng<br>Đôi tai vểnh ngược.",
+                    "Cú nhìn phía trước<br>Cú ngó phía sau<br>Chuột nhắt ở đâu<br>Chớ hòng chạy thoát"
+                ]
+            },
+            {
+                id: 12, name: "Chú Dơi Ngủ Ngược", image: "condoi.jpg",
+                poem: [
+                    "Ngủ thì treo ngược<br>Chân bám cành cao<br>Đầu chúc xuống thấp<br>Chẳng sợ ngã nhào",
+                    "Dơi ơi tại sao?<br>Ngủ kỳ lạ thế?<br>Dơi cười nhỏ nhẹ:<br>Thói quen lâu rồi!"
+                ]
+            },
+            {
+                id: 13, name: "Đom đóm", image: "domdom.jpg",
+                poem: [
+                    "Mặt trời gác núi<br>Bóng tối lan dần<br>Đom Đóm chuyên cần<br>Lên đèn đi gác.",
+                    "Lá cây xào xạc<br>Mọi người ngủ chưa<br>Gió nhẹ đung đưa<br>Đom đóm bay lượn"
+                ]
+            },
+            {
+                id: 14, name: "Nhạc Sĩ Dế Mèn", image: "demen.jpg",
+                poem: [
+                    "Chẳng cần đàn sáo<br>Chẳng cần trống kèn<br>Chú dế màu đen<br>Tự làm nhạc sĩ.",
+                    "Đôi cánh bền bỉ<br>Cọ thành tiếng vang<br>Khúc hát nhịp nhàng<br>Chào đêm thanh vắng"
+                ]
+            },
+            {
+                id: 15, name: "Chuột Nhắt", image: "conchuot.jpg",
+                poem: [
+                    "Chuột nhắt tí teo<br>Chạy nhảy vèo vèo<br>Đôi mắt đen láy<br>Sợ nhất là mèo.",
+                    "Ban đêm lặng lẽ<br>Chú đi rình mò<br>Gặp hạt gạo to<br>Mang ngay về tổ"
+                ]
+            },
+            {
+                id: 16, name: "Mèo Con Lười Học", image: "conmeo.jpg",
+                poem: [
+                    "Mèo con buồn bực<br>Mai phải đến trường<br>Bèn kiếm cớ luôn<br>Cái đuôi tôi ốm",
+                    "Cừu mới be toáng<br>Tôi sẽ chữa lành<br>Nhưng muốn cho nhanh<br>Cắt đuôi khỏi hết",
+                    "Cắt đuôi ấy chết<br>Tôi đi học đây."
+                ]
+            },
+            {
+                id: 17, name: "Áo Của Nhím", image: "connhim.jpg",
+                poem: [
+                    "Nhím không mặc áo<br>Như bé chúng mình<br>Nhím mang trên mình<br>Ngàn cây kim nhọn.",
+                    "Kim để tự vệ<br>Kim để tìm mồi<br>Nhím ơi giỏi quá<br>Yêu nhím lắm thôi."
+                ]
+            },
+            {
+                id: 18, name: "Cáo Và Chùm Nho", image: "concao.jpg",
+                poem: [
+                    "Có con cáo nọ<br>Thấy chùm nho xanh<br>Cao tít trên cành<br>Cáo thèm chảy nước.",
+                    "Nhảy lên chẳng được<br>Cáo bèn bỏ đi<br>Cáo tự thầm thì:<br>Nho còn xanh chán!"
+                ]
+            },
+            {
+                id: 19, name: "Chú Sói Xám", image: "consoi.jpg",
+                poem: [
+                    "Thân hình cao lớn<br>Bộ lông xám xịt<br>Đôi mắt sáng rực<br>Nhìn vào đêm đen.",
+                    "Chân đi lặng lẽ<br>Tai thính cực kỳ<br>Mỗi bước sói đi<br>Cỏ cây im lặng"
+                ]
+            },
+            {
+                id: 20, name: "Bướm Đêm", image: "buomdem.jpg",
+                poem: [
+                    "Áo màu nâu đất<br>Cánh mỏng rì rào<br>Đợi khi trăng cao<br>Mới ra nhảy múa.",
+                    "Chẳng tìm hoa đỏ<br>Chẳng thích nắng vàng<br>Bướm đêm nhẹ nhàng<br>Bay quanh ánh điện"
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thơ Hay';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-orange-100 text-orange-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Hình Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem thơ
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU - THƠ
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4 justify-center">`;
+                
+                html += `<h3 class="flex-none text-xl md:text-2xl font-bold text-orange-700 mb-6 uppercase border-b border-orange-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col items-center justify-center gap-6 w-full text-center">`;
+                
+                currentCard.poem.forEach((stanza) => {
+                    html += `
+                        <p class="text-slate-700 text-base md:text-lg font-medium leading-relaxed">
+                            ${stanza}
+                        </p>
+                    `;
+                });
+                
+                html += `</div>`; // End Poem Container
+                html += `</div>`; // End Main Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-orange-100 to-yellow-200 p-6 rounded-full shadow-lg shadow-orange-200">
+                        <i data-lucide="award" class="w-20 h-20 text-orange-600 fill-orange-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} các loài động vật ban ngày & ban đêm!
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-col gap-4 w-full items-center mt-2">
+                         <a href="https://catalog.zalo.me/?cid=Cj7DJZwIc0rDhRz0DP6M2ZogmrT3w-GVCQNEIK2Gdc0fjSuv98Jh5G" 
+                           target="_blank"
+                           class="w-full max-w-xs flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100">
+                            <i data-lucide="gift" class="w-5 h-5"></i>
+                            Sản phẩm cho sức khoẻ Mẹ & Bé 
+                        </a>
+
+                        <a href="https://catalog.zalo.me/?cid=CjBEIJkIcGf8hRv7C96N3Jcgmb16w-KODANFJaMGdsSijSy-8OJg4W" 
+                           target="_blank"
+                           class="inline-flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all hover:scale-105 transform border border-blue-400">
+                            <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                            Sản phẩm phát triển trí tuệ & Cảm xúc cho bé
+                        </a>
+                    </div>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-orange-600 hover:text-orange-800 font-semibold text-sm mt-4 bg-orange-50 px-5 py-2 rounded-full transition-colors border border-orange-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
